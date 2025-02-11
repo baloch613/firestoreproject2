@@ -1,0 +1,105 @@
+{
+  "project_info": {
+    "project_number": "447654155166",
+    "project_id": "petzone-2c264",
+    "storage_bucket": "petzone-2c264.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447654155166:android:83eafbef426432b22c3c8f",
+        "android_client_info": {
+          "package_name": "com.example.chatt_app_ameer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447654155166-hcku3rccsk5m7atk7lgolgb2k6bh9qn9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.chatt_app_ameer",
+            "certificate_hash": "8f405894db4b8b69899bde4045f7983654818032"
+          }
+        },
+        {
+          "client_id": "447654155166-ndg4mnijg8qtuihn8qks030boqf6sn47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3g42chbB72PT5u6ODOcL_QiSj1b0mMec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447654155166-ndg4mnijg8qtuihn8qks030boqf6sn47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447654155166:android:8c2ba2ac61fda4152c3c8f",
+        "android_client_info": {
+          "package_name": "com.example.firestoreproject2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447654155166-ndg4mnijg8qtuihn8qks030boqf6sn47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3g42chbB72PT5u6ODOcL_QiSj1b0mMec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447654155166-ndg4mnijg8qtuihn8qks030boqf6sn47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:447654155166:android:6a31e685514429ab2c3c8f",
+        "android_client_info": {
+          "package_name": "com.example.petshop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "447654155166-ndg4mnijg8qtuihn8qks030boqf6sn47.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3g42chbB72PT5u6ODOcL_QiSj1b0mMec"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "447654155166-ndg4mnijg8qtuihn8qks030boqf6sn47.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
