@@ -84,7 +84,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                         onTap: () {
                           Navigator.pop(context);
                         },
-                        child: const Icon(Icons.abc)),
+                        child: const Icon(Icons.arrow_back)),
                   ),
                   SizedBox(height: height * 0.15),
                   const Text(
