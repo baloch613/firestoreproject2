@@ -1,13 +1,15 @@
-
+// ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:async';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/Screens/audioController.dart';
+import 'package:firestoreproject2/Screens/controller/audio_controller.dart';
 import 'package:firestoreproject2/Screens/pdf.dart';
 import 'package:firestoreproject2/video.dart';
 import 'package:flutter/material.dart';
@@ -53,13 +55,13 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-
-    _audioPlayer.onPlayerComplete.listen((_) {
-      setState(() {
-        isPlaying = false;
-        currentPlayingIndex = -1;
-      });
-    });
+    Get.put(MyAudioController());
+    // _audioPlayer.onPlayerComplete.listen((_) {
+    //   setState(() {
+    //     isPlaying = false;
+    //     currentPlayingIndex = -1;
+    //   });
+    // });
 
     msgController.addListener(() {
       setState(() {
@@ -129,73 +131,67 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  final Record _audioRecorder = Record();
-  String? _recordedFilePath;
-  Future<bool> checkPermissions() async {
-    PermissionStatus micStatus = await Permission.microphone.request();
+  // final Record _audioRecorder = Record();
+  // String? _recordedFilePath;
+  // Future<bool> checkPermissions() async {
+  //   PermissionStatus micStatus = await Permission.microphone.request();
 
-    if (micStatus.isGranted) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  //   if (micStatus.isGranted) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
 
-  Future<void> startRecording() async {
-    bool hasPermission = await checkPermissions();
-    if (!hasPermission) {
-      print("Permission denied");
-      return;
-    }
+// Future<void> startRecording() async {
+//   bool hasPermission = await checkPermissions();
+//   if (!hasPermission) {
+//     print("Permission denied");
+//     return;
+//   }
 
-    Directory tempDir = await getTemporaryDirectory();
-    String filePath =
-        '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.m4a';
+//   Directory tempDir = await getTemporaryDirectory();
+//   String filePath =
+//       '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.m4a';
 
-    await _audioRecorder.start(
-      path: filePath,
-      encoder: AudioEncoder.aacLc, // Better compatibility
-      bitRate: 128000,
-    );
+//   await _audioRecorder.start(
+//     path: filePath,
+//     encoder: AudioEncoder.aacLc, // Better compatibility
+//     bitRate: 128000,
+//   );
 
-    setState(() {
-      isRecording = true;
-      _recordedFilePath = filePath;
-    });
-  }
+//   setState(() {
+//     isRecording = true;
+//     _recordedFilePath = filePath;
+//   });
+// }
 
-  Future<void> stopRecording() async {
-    if (!isRecording) return;
-
-    String? path = await _audioRecorder.stop();
-    setState(() {
-      isRecording = false;
-    });
-    audioController.end.value = DateTime.now();
-    audioController.calcDuration();
-    // audioController.isRecording.value = false;
-    // audioController.isSending.value = true;
-    print("${audioController.total}");
-    //audioController.isSending.value = false;
-    // onSendMessage(strVal, TypeMessage.audio,
-    //     duration: audioController.total);
-
-    if (path != null) {
-      File audioFile = File(path);
-      final String fileName =
-          "UserAudios/${DateTime.now().microsecondsSinceEpoch}.m4a";
-      final reference = FirebaseStorage.instance.ref().child(fileName);
-
-      await reference.putFile(audioFile);
-
-      String downloadUrl = await reference.getDownloadURL();
-      print("Audio uploaded successfully: $downloadUrl");
-
-      _onSendMessage(downloadUrl, "audio", audioController.total);
-    }
-  }
-
-  final double _sliderValue = 0.0;
+// Future<void> stopRecording() async {
+//   if (!isRecording) return;
+//   String? path = await _audioRecorder.stop();
+//   setState(() {
+//     isRecording = false;
+//   });
+//   audioController.end.value = DateTime.now();
+//   audioController.calcDuration();
+//   // audioController.isRecording.value = false;
+//   // audioController.isSending.value = true;
+//   print("${audioController.total}");
+//   //audioController.isSending.value = false;
+//   // onSendMessage(strVal, TypeMessage.audio,
+//   //     duration: audioController.total);
+//   if (path != null) {
+//     File audioFile = File(path);
+//     final String fileName =
+//         "UserAudios/${DateTime.now().microsecondsSinceEpoch}.m4a";
+//     final reference = FirebaseStorage.instance.ref().child(fileName);
+//     await reference.putFile(audioFile);
+//     String downloadUrl = await reference.getDownloadURL();
+//     print("Audio uploaded successfully: $downloadUrl");
+//     _onSendMessage(downloadUrl, "audio", audioController.total);
+//   }
+// }
+// final double _sliderValue = 0.0;
 
   void _onSendMessage(String msg, String type, String audioDuration) async {
     Map<String, dynamic> messages = {
@@ -390,44 +386,52 @@ class _ChatScreenState extends State<ChatScreen> {
                     const SizedBox(
                       width: 5,
                     ),
-                    GestureDetector(
+                    Builder(builder: (context) {
+                      return GestureDetector(
                         onTap: () {
                           sendText();
                         },
                         onLongPress: () async {
-                          startRecording();
-                          //    audioController.isRecording.value = true;
-                          // audioController.start.value = DateTime.now();
-                          audioController.start.value = DateTime.now();
-                          print(DateTime.now());
-                          setState(() {
-                            isRecording = true;
-                          });
+                          MyAudioController.to.startRecording();
+                          MyAudioController.to.start = DateTime.now();
                         },
                         onLongPressEnd: (details) async {
-                          if (isRecording) {
-                            await stopRecording();
-
-                            setState(() {
-                              isRecording = false;
-                            });
-                          }
+                          await MyAudioController.to.stopRecording(
+                              StaticData.model!.name!, widget.chatroomId!);
+                          MyAudioController.to.changeRecordingStatus(false);
                         },
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.green,
-                          child: Center(
-                              child: isMessageEmpty
-                                  ? Icon(
-                                      Icons.mic,
-                                      color: Colors.white,
-                                      size: isRecording ? 50 : 30,
-                                    )
-                                  : const Icon(
-                                      Icons.send,
-                                      color: Colors.white,
-                                    )),
-                        ))
+                        child: isMessageEmpty
+                            ? GetBuilder<MyAudioController>(builder: (obj) {
+                                return CircleAvatar(
+                                  radius: 27,
+                                  backgroundColor: Colors.green,
+                                  child: Center(
+                                    child: obj.isRecording
+                                        ? Icon(
+                                            Icons.record_voice_over,
+                                            color: Colors.white,
+                                            size: isRecording ? 50 : 30,
+                                          )
+                                        : Icon(
+                                            Icons.mic,
+                                            color: Colors.white,
+                                            size: isRecording ? 50 : 30,
+                                          ),
+                                  ),
+                                );
+                              })
+                            : const CircleAvatar(
+                                radius: 27,
+                                backgroundColor: Colors.green,
+                                child: Center(
+                                  child: Icon(
+                                    Icons.send,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                      );
+                    })
                   ],
                 ),
               ),
@@ -480,8 +484,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     GestureDetector(
                                       onTap: () {
                                         audioController.onPressedPlayButton(
-                                            index, map["message"]);
-                                        // changeProg(duration: duration);
+                                            index, map['message']);
                                       },
                                       onSecondaryTap: () {
                                         _audioPlayer.stop();
@@ -518,8 +521,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                                 minHeight: 5,
                                                 backgroundColor: Colors.grey,
                                                 valueColor:
-                                                    AlwaysStoppedAnimation<Color>(
-                                                       
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
                                                   (isSender)
                                                       ? (audioController
                                                                   .isRecordPlaying &&

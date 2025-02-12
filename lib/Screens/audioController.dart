@@ -24,21 +24,6 @@ class AudioController extends GetxController {
   void onInit() {
     _audioPlayerService = AudioPlayerAdapter();
 
-    // _audioPlayerService.getAudioPlayer.onDurationChanged.listen((duration) {
-    //   totalDuration.value = duration.inSeconds; // Store in seconds
-    // });
-
-    // _audioPlayerService.getAudioPlayer.onPositionChanged.listen((duration) {
-    //   currentDuration.value = duration.inSeconds; // Store in seconds
-    //   completedPercentage.value = currentDuration.value / totalDuration.value;
-    // });
-
-    // _audioPlayerService.getAudioPlayer.onPlayerComplete.listen((event) async {
-    //   await _audioPlayerService.getAudioPlayer.seek(Duration.zero);
-    //   _isRecordPlaying.value = false;
-    //   currentDuration.value = 0; // Reset duration
-    //   completedPercentage.value = 0.0;
-    // });
     _audioPlayerService.getAudioPlayer.onDurationChanged.listen((duration) {
       totalDuration.value = duration.inSeconds;
       remainingDuration.value = duration.inSeconds; // Initialize remaining time

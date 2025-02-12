@@ -25,20 +25,17 @@ class _CustomdButtonState extends State<CustomdButton> {
     return SizedBox(
       height: height * 0.07,
       width: width,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: ElevatedButton(
-          onPressed: widget.onPressed,
-          style: ElevatedButton.styleFrom(
-              backgroundColor: widget.bgColor,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10))),
-          child: Center(
-              child: Text(
-            widget.text,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-          )),
-        ),
+      child: ElevatedButton(
+        onPressed: widget.onPressed,
+        style: ElevatedButton.styleFrom(
+            backgroundColor: widget.bgColor,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10))),
+        child: Center(
+            child: Text(
+          widget.text,
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+        )),
       ),
     );
   }

@@ -44,10 +44,6 @@ class _Login_ScreenState extends State<Login_Screen> {
       passwordController.clear();
 
       // ignore: use_build_context_synchronously
-      // MySnackbar.showSnackbar(context, "Name or password is incorrect!",
-      // bgColor: Colors.red);
-
-      // ignore: use_build_context_synchronously
       showMySnackbar(context, "Name or password is incorrect!");
 
       return;
@@ -73,8 +69,8 @@ class _Login_ScreenState extends State<Login_Screen> {
 
   @override
   void initState() {
-    passwordController = TextEditingController();
-    namecontroller = TextEditingController();
+    passwordController = TextEditingController(text: "221122");
+    namecontroller = TextEditingController(text: "ali");
     super.initState();
   }
 
