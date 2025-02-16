@@ -1,11 +1,15 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firestoreproject2/Models/reqmodel.dart';
 import 'package:firestoreproject2/Screens/Chat_Screen.dart';
 import 'package:firestoreproject2/Models/Model.dart';
+import 'package:firestoreproject2/Screens/Request_Screen.dart';
 import 'package:firestoreproject2/Screens/profile.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _index = 0;
   List<Chatbox> allUsers = [];
+
+//   List<Chatbox> Allfriends = [];
+
+// getAllFriend()async{
+
+// }
 
   getAllUsers() async {
     allUsers.clear();
@@ -97,13 +107,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           InkWell(
                               onTap: () {
-                                pageController.animateToPage(2,
-                                    duration: const Duration(microseconds: 100),
-                                    curve: Curves.easeInOut);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const RequestScreen(),
+                                    ));
                               },
-                              child: const CircleAvatar(
-                                backgroundImage:
-                                    AssetImage("images/mukhtiar.jpg"),
+                              child: const Text(
+                                "Requests",
+                                style: TextStyle(color: Colors.white),
                               ))
                         ],
                       ),
@@ -319,12 +332,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       trailing: Row(
                                         mainAxisSize: MainAxisSize.min,
-                                        children: const [
+                                        children: [
                                           Icon(Icons.wifi_calling_outlined),
                                           SizedBox(
                                             width: 10,
                                           ),
-                                          Icon(Icons.person_add_outlined)
+                                          InkWell(
+                                              onTap: () async {
+                                                Uuid uid = Uuid();
+                                                String reqId = uid.v4();
+
+                                                ReqModel model = ReqModel(
+                                                    reciverId:
+                                                        allUsers[index].userid,
+                                                    reciverName:
+                                                        allUsers[index].name,
+                                                    requestId: reqId,
+                                                    senderId: StaticData
+                                                        .model!.userid,
+                                                    senderName:
+                                                        StaticData.model!.name,
+                                                    status: 'pending');
+
+                                                await FirebaseFirestore.instance
+                                                    .collection('requests')
+                                                    .doc(reqId)
+                                                    .set(model.toMap());
+                                              },
+                                              child: Icon(
+                                                  Icons.person_add_outlined))
                                         ],
                                       ),
                                     ),

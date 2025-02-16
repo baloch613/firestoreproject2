@@ -53,13 +53,14 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
           Chatbox.fromMap(snapshot.docs[0].data() as Map<String, dynamic>);
       StaticData.model = model;
 
-      // ignore: use_build_context_synchronously
-      showMySnackbar(context, "Incorrect old password. Please try again!");
+  
+
       setState(() {
         oldpass = model.password!;
         oldPasswordController.clear();
         newPassController.clear();
         confirmPassController.clear();
+        showMySnackbar(context, "Password Updaded successfully");
       });
     }
   }

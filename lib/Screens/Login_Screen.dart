@@ -69,8 +69,8 @@ class _Login_ScreenState extends State<Login_Screen> {
 
   @override
   void initState() {
-    passwordController = TextEditingController(text: "221122");
-    namecontroller = TextEditingController(text: "ali");
+    namecontroller = TextEditingController(text: "mukhtiar");
+    passwordController = TextEditingController(text: "112233");
     super.initState();
   }
 

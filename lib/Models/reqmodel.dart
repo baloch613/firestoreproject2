@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 class ReqModel {
@@ -5,13 +6,15 @@ class ReqModel {
   String? senderId;
   String? reciverName;
   String? reciverId;
-  String? reqId;
+  String? requestId;
+  String? status;
   ReqModel({
     this.senderName,
     this.senderId,
     this.reciverName,
     this.reciverId,
-    this.reqId,
+    this.requestId,
+    this.status,
   });
 
   ReqModel copyWith({
@@ -19,14 +22,16 @@ class ReqModel {
     String? senderId,
     String? reciverName,
     String? reciverId,
-    String? reqId,
+    String? requestId,
+    String? status,
   }) {
     return ReqModel(
       senderName: senderName ?? this.senderName,
       senderId: senderId ?? this.senderId,
       reciverName: reciverName ?? this.reciverName,
       reciverId: reciverId ?? this.reciverId,
-      reqId: reqId ?? this.reqId,
+      requestId: requestId ?? this.requestId,
+      status: status ?? this.status,
     );
   }
 
@@ -36,19 +41,19 @@ class ReqModel {
       'senderId': senderId,
       'reciverName': reciverName,
       'reciverId': reciverId,
-      'reqId': reqId,
+      'requestId': requestId,
+      'status': status,
     };
   }
 
   factory ReqModel.fromMap(Map<String, dynamic> map) {
     return ReqModel(
-      senderName:
-          map['senderName'] != null ? map['senderName'] as String : null,
+      senderName: map['senderName'] != null ? map['senderName'] as String : null,
       senderId: map['senderId'] != null ? map['senderId'] as String : null,
-      reciverName:
-          map['reciverName'] != null ? map['reciverName'] as String : null,
+      reciverName: map['reciverName'] != null ? map['reciverName'] as String : null,
       reciverId: map['reciverId'] != null ? map['reciverId'] as String : null,
-      reqId: map['reqId'] != null ? map['reqId'] as String : null,
+      requestId: map['requestId'] != null ? map['requestId'] as String : null,
+      status: map['status'] != null ? map['status'] as String : null,
     );
   }
 
@@ -59,26 +64,29 @@ class ReqModel {
 
   @override
   String toString() {
-    return 'ReqModel(senderName: $senderName, senderId: $senderId, reciverName: $reciverName, reciverId: $reciverId, reqId: $reqId)';
+    return 'ReqModel(senderName: $senderName, senderId: $senderId, reciverName: $reciverName, reciverId: $reciverId, requestId: $requestId, status: $status)';
   }
 
   @override
   bool operator ==(covariant ReqModel other) {
     if (identical(this, other)) return true;
-
-    return other.senderName == senderName &&
-        other.senderId == senderId &&
-        other.reciverName == reciverName &&
-        other.reciverId == reciverId &&
-        other.reqId == reqId;
+  
+    return 
+      other.senderName == senderName &&
+      other.senderId == senderId &&
+      other.reciverName == reciverName &&
+      other.reciverId == reciverId &&
+      other.requestId == requestId &&
+      other.status == status;
   }
 
   @override
   int get hashCode {
     return senderName.hashCode ^
-        senderId.hashCode ^
-        reciverName.hashCode ^
-        reciverId.hashCode ^
-        reqId.hashCode;
+      senderId.hashCode ^
+      reciverName.hashCode ^
+      reciverId.hashCode ^
+      requestId.hashCode ^
+      status.hashCode;
   }
 }

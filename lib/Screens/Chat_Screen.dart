@@ -9,7 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/Screens/audioController.dart';
-import 'package:firestoreproject2/Screens/controller/audio_controller.dart';
+import 'package:firestoreproject2/Screens/audio_controller.dart';
 import 'package:firestoreproject2/Screens/pdf.dart';
 import 'package:firestoreproject2/video.dart';
 import 'package:flutter/material.dart';
@@ -56,12 +56,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     Get.put(MyAudioController());
-    // _audioPlayer.onPlayerComplete.listen((_) {
-    //   setState(() {
-    //     isPlaying = false;
-    //     currentPlayingIndex = -1;
-    //   });
-    // });
+  
 
     msgController.addListener(() {
       setState(() {
@@ -130,68 +125,6 @@ class _ChatScreenState extends State<ChatScreen> {
       msgController.clear();
     }
   }
-
-  // final Record _audioRecorder = Record();
-  // String? _recordedFilePath;
-  // Future<bool> checkPermissions() async {
-  //   PermissionStatus micStatus = await Permission.microphone.request();
-
-  //   if (micStatus.isGranted) {
-  //     return true;
-  //   } else {
-  //     return false;
-  //   }
-  // }
-
-// Future<void> startRecording() async {
-//   bool hasPermission = await checkPermissions();
-//   if (!hasPermission) {
-//     print("Permission denied");
-//     return;
-//   }
-
-//   Directory tempDir = await getTemporaryDirectory();
-//   String filePath =
-//       '${tempDir.path}/audio_${DateTime.now().millisecondsSinceEpoch}.m4a';
-
-//   await _audioRecorder.start(
-//     path: filePath,
-//     encoder: AudioEncoder.aacLc, // Better compatibility
-//     bitRate: 128000,
-//   );
-
-//   setState(() {
-//     isRecording = true;
-//     _recordedFilePath = filePath;
-//   });
-// }
-
-// Future<void> stopRecording() async {
-//   if (!isRecording) return;
-//   String? path = await _audioRecorder.stop();
-//   setState(() {
-//     isRecording = false;
-//   });
-//   audioController.end.value = DateTime.now();
-//   audioController.calcDuration();
-//   // audioController.isRecording.value = false;
-//   // audioController.isSending.value = true;
-//   print("${audioController.total}");
-//   //audioController.isSending.value = false;
-//   // onSendMessage(strVal, TypeMessage.audio,
-//   //     duration: audioController.total);
-//   if (path != null) {
-//     File audioFile = File(path);
-//     final String fileName =
-//         "UserAudios/${DateTime.now().microsecondsSinceEpoch}.m4a";
-//     final reference = FirebaseStorage.instance.ref().child(fileName);
-//     await reference.putFile(audioFile);
-//     String downloadUrl = await reference.getDownloadURL();
-//     print("Audio uploaded successfully: $downloadUrl");
-//     _onSendMessage(downloadUrl, "audio", audioController.total);
-//   }
-// }
-// final double _sliderValue = 0.0;
 
   void _onSendMessage(String msg, String type, String audioDuration) async {
     Map<String, dynamic> messages = {
