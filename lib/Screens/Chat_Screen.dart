@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
-import 'package:firestoreproject2/Screens/audioController.dart';
 import 'package:firestoreproject2/Screens/audio_controller.dart';
 import 'package:firestoreproject2/Screens/pdf.dart';
 import 'package:firestoreproject2/video.dart';
@@ -16,9 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
 
 class ChatScreen extends StatefulWidget {
   final String? username;
@@ -36,7 +32,7 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController msgController = TextEditingController();
   bool isMessageEmpty = true;
 
-  AudioController audioController = Get.put(AudioController());
+  // AudioController audioController = Get.put(AudioController());
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   bool isRecording = false;
@@ -56,7 +52,6 @@ class _ChatScreenState extends State<ChatScreen> {
   void initState() {
     super.initState();
     Get.put(MyAudioController());
-  
 
     msgController.addListener(() {
       setState(() {
@@ -108,6 +103,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     Navigator.pop(context);
                   },
                   icon: const Icon(Icons.file_present_outlined)),
+              IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(Icons.location_on)),
             ],
           ),
         );
@@ -316,7 +316,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         ],
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       width: 5,
                     ),
                     Builder(builder: (context) {
@@ -325,13 +325,28 @@ class _ChatScreenState extends State<ChatScreen> {
                           sendText();
                         },
                         onLongPress: () async {
+                          //    MyAudioController.to.changeRecordingStatus(true);
                           MyAudioController.to.startRecording();
+                          // startRecording();
+                          // //    audioController.isRecording.value = true;
                           MyAudioController.to.start = DateTime.now();
+                          // print(DateTime.now());
+                          // setState(() {
+                          //   isRecording = true;
+                          // });
                         },
                         onLongPressEnd: (details) async {
                           await MyAudioController.to.stopRecording(
                               StaticData.model!.name!, widget.chatroomId!);
                           MyAudioController.to.changeRecordingStatus(false);
+
+                          // if (isRecording) {
+                          //   await stopRecording();
+
+                          //   setState(() {
+                          //     isRecording = false;
+                          //   });
+                          // }
                         },
                         child: isMessageEmpty
                             ? GetBuilder<MyAudioController>(builder: (obj) {
@@ -353,11 +368,11 @@ class _ChatScreenState extends State<ChatScreen> {
                                   ),
                                 );
                               })
-                            : const CircleAvatar(
+                            : CircleAvatar(
                                 radius: 27,
                                 backgroundColor: Colors.green,
                                 child: Center(
-                                  child: Icon(
+                                  child: const Icon(
                                     Icons.send,
                                     color: Colors.white,
                                   ),
@@ -402,106 +417,94 @@ class _ChatScreenState extends State<ChatScreen> {
                         url: map["message"],
                       )
                     : map['type'] == "audio"
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                senderName,
-                                style: const TextStyle(
-                                    fontSize: 11, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: height * 0.05,
-                                child: Row(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        audioController.onPressedPlayButton(
-                                            index, map['message']);
-                                      },
-                                      onSecondaryTap: () {
-                                        _audioPlayer.stop();
-                                        //   audioController.completedPercentage.value = 0.0;
-                                      },
-                                      child: Obx(
-                                        () =>
-                                            (audioController.isRecordPlaying &&
-                                                    audioController.currentId ==
-                                                        index)
-                                                ? Icon(
-                                                    Icons.pause,
-                                                    color: isSender
-                                                        ? Colors.white
-                                                        : Colors.red,
-                                                  )
-                                                : Icon(
-                                                    Icons.play_arrow,
-                                                    color: isSender
-                                                        ? Colors.white
-                                                        : Colors.red,
-                                                  ),
-                                      ),
-                                    ),
-                                    Obx(() => Expanded(
-                                          child: SizedBox(
-                                            width: width * 0.3,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 10),
-                                              child: LinearProgressIndicator(
-                                                key: ValueKey(map['sendBy']),
-                                                minHeight: 5,
-                                                backgroundColor: Colors.grey,
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                        Color>(
-                                                  (isSender)
-                                                      ? (audioController
-                                                                  .isRecordPlaying &&
-                                                              audioController
-                                                                      .currentId ==
-                                                                  index)
-                                                          ? Colors
-                                                              .white // Change to white when playing
-                                                          : Colors
-                                                              .red // Change to red when sent
-                                                      : Colors
-                                                          .white, // Keep white for received messages
-                                                ),
-                                                value: (audioController
-                                                            .isRecordPlaying &&
-                                                        audioController
-                                                                .currentId ==
-                                                            index)
-                                                    ? audioController
-                                                        .completedPercentage
-                                                        .value
-                                                    : audioController
-                                                        .totalDuration.value
-                                                        .toDouble(),
+                        ? GetBuilder<MyAudioController>(builder: (obj) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  senderName,
+                                  style: const TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: height * 0.05,
+                                  child: Row(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          obj.onPressedPlayButton(
+                                              index, map['message']);
+                                        },
+                                        onSecondaryTap: () {
+                                          _audioPlayer.stop();
+                                          //   audioController.completedPercentage.value = 0.0;
+                                        },
+                                        child: (obj.isRecordPlaying &&
+                                                obj.currentId == index)
+                                            ? Icon(
+                                                Icons.cancel,
+                                                color: isSender
+                                                    ? Colors.white
+                                                    : Colors.red,
+                                              )
+                                            : Icon(
+                                                Icons.play_arrow,
+                                                color: isSender
+                                                    ? Colors.white
+                                                    : Colors.red,
                                               ),
+                                      ),
+                                      Expanded(
+                                        child: SizedBox(
+                                          width: width * 0.3,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 0),
+                                            child: LinearProgressIndicator(
+                                              key: ValueKey(map['sendBy']),
+                                              minHeight: 5,
+                                              backgroundColor: Colors.grey,
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                (isSender)
+                                                    ? (obj.isRecordPlaying &&
+                                                            obj.currentId ==
+                                                                index)
+                                                        ? Colors
+                                                            .white // Change to white when playing
+                                                        : Colors
+                                                            .red // Change to red when sent
+                                                    : Colors
+                                                        .white, // Keep white for received messages
+                                              ),
+                                              value: (obj.isRecordPlaying &&
+                                                      obj.currentId == index)
+                                                  ? obj.completedPercentage
+                                                  : obj.totalDuration
+                                                      .toDouble(),
                                             ),
                                           ),
-                                        )),
-                                    Obx(() => Text(
-                                          (audioController.isRecordPlaying &&
-                                                  audioController.currentId ==
-                                                      index)
-                                              ? audioController
-                                                  .getRemainingTime() // Show countdown
-                                              : "${map['duration']} s", // Show default duration if not playing
-                                          style: TextStyle(
-                                              fontSize: 12,
-                                              color: isSender
-                                                  ? Colors.white
-                                                  : Colors.red),
-                                        )),
-                                  ],
-                                ),
-                              )
-                            ],
-                          )
+                                        ),
+                                      ),
+                                      Text(
+                                        (obj.isRecordPlaying &&
+                                                obj.currentId == index)
+                                            ? obj
+                                                .getRemainingTime() // Show countdown
+                                            : "${map['duration']} s", // Show default duration if not playing
+                                        style: TextStyle(
+                                            fontSize: 12,
+                                            color: isSender
+                                                ? Colors.white
+                                                : Colors.red),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+                          })
                         : map['type'] == "img"
                             ? Container(
                                 height: size.height * 0.2,
