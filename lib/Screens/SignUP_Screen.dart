@@ -184,7 +184,6 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                           MyTextfield(
                             lableText: "Your Name",
                             hinttext: "Name",
-                            controller: namecontroller,
                             validator: (value) {
                               if (value!.trim().isEmpty) {
                                 return "Name Cannot be Empty";

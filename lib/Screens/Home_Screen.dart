@@ -8,7 +8,6 @@ import 'package:firestoreproject2/Screens/Request_Screen.dart';
 import 'package:firestoreproject2/Screens/profile.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,12 +23,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _index = 0;
   List<Chatbox> allUsers = [];
-
-//   List<Chatbox> Allfriends = [];
-
-// getAllFriend()async{
-
-// }
 
   getAllUsers() async {
     allUsers.clear();
@@ -47,8 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    getAllUsers();
-    super.initState();
   }
 
   String chatRoomId(String user1, String user2) {
@@ -240,9 +231,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              height: height * 0.1,
-                            ),
                           ],
                         ),
                       ),
@@ -250,7 +238,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              //second page calls screen
               Container(
                 height: height,
                 width: width,
@@ -306,7 +293,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Expanded(
                               child: ListView.builder(
-                                // physics:  BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
                                 itemCount: allUsers.length,
                                 itemBuilder: (context, index) {
                                   return Card(
@@ -375,8 +361,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              //third page profile & setings
-
               Container(
                 height: height,
                 width: width,
@@ -429,7 +413,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10, vertical: 10),
-                        //scrollvewi is not important
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
@@ -643,9 +626,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: 16),
                                   ),
                                 ],
-                              ),
-                              SizedBox(
-                                height: height * 0.1,
                               ),
                             ],
                           ),
