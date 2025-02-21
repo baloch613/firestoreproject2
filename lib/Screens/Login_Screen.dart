@@ -9,17 +9,16 @@ import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/components/my_textfield.dart';
 import 'package:firestoreproject2/components/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-// ignore: camel_case_types
-class Login_Screen extends StatefulWidget {
-  const Login_Screen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<Login_Screen> createState() => _Login_ScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-// ignore: camel_case_types
-class _Login_ScreenState extends State<Login_Screen> {
+class _LoginScreenState extends State<LoginScreen> {
   var height, width;
   bool isPasswordVisible = false;
 
@@ -53,11 +52,7 @@ class _Login_ScreenState extends State<Login_Screen> {
 
       StaticData.model = model;
       // ignore: use_build_context_synchronously
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
-          ));
+      Get.off(() => const HomeScreen(), transition: Transition.rightToLeft);
 
       passwordController.clear();
 
@@ -256,7 +251,7 @@ class _Login_ScreenState extends State<Login_Screen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const SignUp_Screen(),
+                                builder: (context) => const SignUpScreen(),
                               ));
                         },
                         child: const Text(

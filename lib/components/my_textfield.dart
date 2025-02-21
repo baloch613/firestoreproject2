@@ -6,6 +6,7 @@ class MyTextfield extends StatefulWidget {
   final String? hinttext;
   final bool isPassword;
   final String? lableText;
+  final TextInputType? keyboardType;
   final TextEditingController controller;
   final String? Function(String?)? validator;
   const MyTextfield({
@@ -15,6 +16,7 @@ class MyTextfield extends StatefulWidget {
     required this.controller,
     this.validator,
     this.lableText,
+    this.keyboardType,
   });
 
   @override
@@ -29,6 +31,7 @@ class _MyTextfieldState extends State<MyTextfield> {
     height = MediaQuery.of(context).size.height;
     width = MediaQuery.of(context).size.width;
     return TextFormField(
+      keyboardType: widget.keyboardType,
       controller: widget.controller,
       obscureText: widget.isPassword ? !isPassVisible : false,
       style: const TextStyle(fontSize: 14),

@@ -32,7 +32,6 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController msgController = TextEditingController();
   bool isMessageEmpty = true;
 
-  // AudioController audioController = Get.put(AudioController());
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   bool isRecording = false;

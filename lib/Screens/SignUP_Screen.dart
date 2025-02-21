@@ -4,18 +4,19 @@ import 'package:firestoreproject2/Screens/Login_Screen.dart';
 import 'package:firestoreproject2/Models/Model.dart';
 import 'package:firestoreproject2/components/clickbutton.dart';
 import 'package:firestoreproject2/components/my_textfield.dart';
+import 'package:firestoreproject2/components/snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:uuid/uuid.dart';
 
-class SignUp_Screen extends StatefulWidget {
-  const SignUp_Screen({super.key});
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<SignUp_Screen> createState() => _SignUp_ScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-// ignore: camel_case_types
-class _SignUp_ScreenState extends State<SignUp_Screen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   var height, width;
   final _formKey = GlobalKey<FormState>();
   TextEditingController emailController = TextEditingController();
@@ -27,6 +28,15 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection("users")
+        .where("email", isEqualTo: emailController.text)
+        .get();
+    if (snapshot.docs.isNotEmpty) {
+      // ignore: use_build_context_synchronously
+      showMySnackbar(context, "This email is already registered");
+      return;
+    }
     var uid = const Uuid();
     String userId = uid.v4();
 
@@ -36,27 +46,18 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
         password: passwordController.text,
         userid: userId);
 
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
         .set(model.toMap());
     emailController.clear();
     namecontroller.clear();
     passwordController.clear();
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text(
-        "Account Created Successfully",
-        style: TextStyle(color: Colors.white, fontSize: 16),
-      ),
-      backgroundColor: Colors.blue,
-    ));
+    // ignore: use_build_context_synchronously
+    showMySnackbar(context, "Account Created Successfully");
 
     Future.delayed(const Duration(seconds: 2), () {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Login_Screen(),
-          ));
+      Get.off(() => const LoginScreen());
     });
   }
 
@@ -96,7 +97,8 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                     height: height * 0.02,
                   ),
                   const Text(
-                    "Welcome to chatbox! Sign up using your social\n              account or email to continue us",
+                    "Welcome to chatbox! Sign up using your social\naccount or email to continue us",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   ),
@@ -182,6 +184,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           MyTextfield(
+                            controller: namecontroller,
                             lableText: "Your Name",
                             hinttext: "Name",
                             validator: (value) {
@@ -199,10 +202,17 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                           MyTextfield(
                             lableText: "Your Email",
                             hinttext: "Email",
+                            keyboardType: TextInputType.emailAddress,
                             controller: emailController,
                             validator: (value) {
+                              final emailRegex = RegExp(
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
                               if (value == null || value.trim().isEmpty) {
+                                emailController.clear();
                                 return "Please Enter Your Email";
+                              }
+                              if (!emailRegex.hasMatch(value)) {
+                                return "Enter a valid email";
                               }
                               return null;
                             },
@@ -253,7 +263,7 @@ class _SignUp_ScreenState extends State<SignUp_Screen> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const Login_Screen(),
+                                builder: (context) => const LoginScreen(),
                               ));
                         },
                         child: const Text(
