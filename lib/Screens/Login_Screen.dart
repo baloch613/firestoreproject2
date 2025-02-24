@@ -10,6 +10,7 @@ import 'package:firestoreproject2/components/my_textfield.dart';
 import 'package:firestoreproject2/components/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -270,4 +271,9 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+  // Future<void> saveDataTOSF(String id) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   await prefs.setString('userid', id);
+  // }
 }

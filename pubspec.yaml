@@ -50,15 +50,19 @@ dependencies:
   permission_handler: 
   video_player:
   record: 
-  # flutter_pdfview: 
   file_picker: 
-  # easy_pdf_viewer:
-  # pdfx: 
-  # http: 
+  http: 
   flutter_cached_pdfview: 
   get: 
   sizer: 
- 
+  google_maps_flutter: 
+  location: 
+  dependencies:
+  shared_preferences: 
+  geolocator: 
+  geocoding: 
+  flutter_google_places: 
+  flutter_place_picker:
  
    
  

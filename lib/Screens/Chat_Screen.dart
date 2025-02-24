@@ -9,6 +9,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/Screens/audio_controller.dart';
+import 'package:firestoreproject2/Screens/map_container.dart';
 import 'package:firestoreproject2/Screens/pdf.dart';
 import 'package:firestoreproject2/video.dart';
 import 'package:flutter/material.dart';
@@ -74,43 +75,106 @@ class _ChatScreenState extends State<ChatScreen> {
       context: context,
       builder: (BuildContext context) {
         return SizedBox(
-          height: height * 0.1,
+          height: height * 0.15,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                  onPressed: () {
-                    pickVideoFromGallery();
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.play_circle)),
-              IconButton(
-                  onPressed: () {
-                    pickImageFromGallary();
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.image)),
-              IconButton(
-                  onPressed: () {
-                    pickimagefromCamera();
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.photo_camera)),
-              IconButton(
-                  onPressed: () {
-                    pickPdf();
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.file_present_outlined)),
-              IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.location_on)),
+              // Document
+              _buildGridItem(
+                icon: Icons.file_present_outlined,
+                label: 'Document',
+                color: Colors.blue,
+                onTap: () {
+                  pickPdf();
+                  Navigator.pop(context);
+                },
+              ),
+              // Gallery
+              _buildGridItem(
+                icon: Icons.image,
+                label: 'Gallery',
+                color: Colors.purple,
+                onTap: () {
+                  pickImageFromGallary();
+                  Navigator.pop(context);
+                },
+              ),
+              // Camera
+              _buildGridItem(
+                icon: Icons.camera_alt,
+                label: 'Camera',
+                color: Colors.pink,
+                onTap: () {
+                  pickimagefromCamera();
+                  Navigator.pop(context);
+                },
+              ),
+              // Video
+              _buildGridItem(
+                icon: Icons.video_library,
+                label: 'Video',
+                color: Colors.red,
+                onTap: () {
+                  pickVideoFromGallery();
+                  Navigator.pop(context);
+                },
+              ),
+              // Location
+              _buildGridItem(
+                icon: Icons.location_on,
+                label: 'Location',
+                color: Colors.green,
+                onTap: () async {
+                  Navigator.pop(context);
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MapScreen()),
+                  );
+
+                  if (result != null) {
+                    final locationData = {
+                      'latitude': result['latitude'],
+                      'longitude': result['longitude'],
+                      'address': result['address'],
+                    };
+                    final locationString = json.encode(locationData);
+                    _onSendMessage(locationString, "location", "");
+                  }
+                },
+              ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildGridItem({
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Icon(icon, color: color, size: 30),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 12),
+          ),
+        ],
+      ),
     );
   }
 
@@ -230,6 +294,11 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                     const CircleAvatar(
                       backgroundColor: Colors.green,
+                      radius: 20,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
                     ),
                     SizedBox(
                       width: width * 0.02,
@@ -293,62 +362,46 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               )),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                 child: Row(
                   children: [
                     Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: TextFormField(
-                            controller: msgController,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                                hintText: "write something here...",
-                                suffixIcon: InkWell(
-                                    onTap: () {
-                                      bottomSheet();
-                                    },
-                                    child: const Icon(Icons.attach_file))),
-                          )),
-                        ],
+                      child: TextFormField(
+                        controller: msgController,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          hintText: "write something here...",
+                          suffixIcon: InkWell(
+                            onTap: () {
+                              bottomSheet();
+                            },
+                            child: const Icon(Icons.attach_file),
+                          ),
+                        ),
                       ),
                     ),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    Builder(builder: (context) {
-                      return GestureDetector(
-                        onTap: () {
-                          sendText();
-                        },
-                        onLongPress: () async {
-                          //    MyAudioController.to.changeRecordingStatus(true);
-                          MyAudioController.to.startRecording();
-                          // startRecording();
-                          // //    audioController.isRecording.value = true;
-                          MyAudioController.to.start = DateTime.now();
-                          // print(DateTime.now());
-                          // setState(() {
-                          //   isRecording = true;
-                          // });
-                        },
-                        onLongPressEnd: (details) async {
-                          await MyAudioController.to.stopRecording(
-                              StaticData.model!.name!, widget.chatroomId!);
-                          MyAudioController.to.changeRecordingStatus(false);
-
-                          // if (isRecording) {
-                          //   await stopRecording();
-
-                          //   setState(() {
-                          //     isRecording = false;
-                          //   });
-                          // }
-                        },
-                        child: isMessageEmpty
-                            ? GetBuilder<MyAudioController>(builder: (obj) {
+                    const SizedBox(width: 5),
+                    // Send/Voice button
+                    GestureDetector(
+                      onTap: () {
+                        sendText();
+                      },
+                      onLongPress: () async {
+                        MyAudioController.to.startRecording();
+                        MyAudioController.to.start = DateTime.now();
+                      },
+                      onLongPressEnd: (details) async {
+                        await MyAudioController.to.stopRecording(
+                          StaticData.model!.name!,
+                          widget.chatroomId!,
+                        );
+                        MyAudioController.to.changeRecordingStatus(false);
+                      },
+                      child: isMessageEmpty
+                          ? GetBuilder<MyAudioController>(
+                              builder: (obj) {
                                 return CircleAvatar(
                                   radius: 27,
                                   backgroundColor: Colors.green,
@@ -366,25 +419,23 @@ class _ChatScreenState extends State<ChatScreen> {
                                           ),
                                   ),
                                 );
-                              })
-                            : CircleAvatar(
-                                radius: 27,
-                                backgroundColor: Colors.green,
-                                child: Center(
-                                  child: const Icon(
-                                    Icons.send,
-                                    color: Colors.white,
-                                  ),
+                              },
+                            )
+                          : const CircleAvatar(
+                              radius: 27,
+                              backgroundColor: Colors.green,
+                              child: Center(
+                                child: Icon(
+                                  Icons.send,
+                                  color: Colors.white,
                                 ),
                               ),
-                      );
-                    })
+                            ),
+                    ),
                   ],
                 ),
               ),
-              SizedBox(
-                height: height * 0.01,
-              )
+              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -516,16 +567,66 @@ class _ChatScreenState extends State<ChatScreen> {
                               )
                             : map["type"] == "video"
                                 ? VideoContainer(videoUrl: map['message'])
-                                : Text(
-                                    map["message"],
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: map["sendBy"] ==
-                                              StaticData.model!.name
-                                          ? Colors.white
-                                          : Colors.black,
-                                    ),
-                                  ),
+                                : map['type'] == "location"
+                                    ? GestureDetector(
+                                        onTap: () {
+                                          final locationData =
+                                              json.decode(map['message']);
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) => MapScreen(
+                                                latitude:
+                                                    locationData['latitude'],
+                                                longitude:
+                                                    locationData['longitude'],
+                                                isViewer: true,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: Container(
+                                          height: height * 0.2,
+                                          width: width * 0.85,
+                                          padding: EdgeInsets.all(5),
+                                        
+                                          child: Center(
+                                            child: Column(
+                                              children: [
+                                                Container(
+                                                  height: height * 0.185,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                    
+                                                    image: DecorationImage(
+                                                      image: NetworkImage(
+                                                        'https://maps.googleapis.com/maps/api/staticmap?'
+                                                        'center=${json.decode(map['message'])['latitude']},${json.decode(map['message'])['longitude']}'
+                                                        '&zoom=15&size=400x200&maptype=roadmap'
+                                                        '&markers=color:red%7C${json.decode(map['message'])['latitude']},${json.decode(map['message'])['longitude']}'
+                                                        '&key=AIzaSyB0sppwm5PsZzrfHd0n2Pv4nSAz188b_Ls',
+                                                      ),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ),
+                                                ),
+                                                   ],
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Text(
+                                        map["message"],
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: map["sendBy"] ==
+                                                  StaticData.model!.name
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
                 Align(
                   alignment: Alignment.bottomRight,
                   child: Text(
