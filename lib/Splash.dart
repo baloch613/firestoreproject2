@@ -6,48 +6,48 @@ import 'package:firestoreproject2/Screens/Login_Screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Splash_Screen extends StatefulWidget {
-  const Splash_Screen({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<Splash_Screen> createState() => _Splash_ScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _Splash_ScreenState extends State<Splash_Screen> {
-  var height, width;
+class _SplashScreenState extends State<SplashScreen> {
 
-  getDataFromSF() async {
+  getdataFromShrdprf() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? fetchdata = prefs.getString("userId");
+    if (fetchdata == null) {
 
-    final String? action = prefs.getString('userid');
-    if (action == null) {
-      Future.delayed(Duration(seconds: 3), () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const LoginScreen();
-        }));
+      Future.delayed(const Duration(seconds: 3), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const LoginScreen()),
+        );
       });
     } else {
-      StaticData.userid = action;
-      Future.delayed(Duration(seconds: 3), () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) {
-          return const HomeScreen();
-        }));
+      StaticData.loginId = fetchdata;
+
+      Future.delayed(const Duration(seconds: 3), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
       });
     }
   }
 
   @override
   void initState() {
-    getDataFromSF();
+    getdataFromShrdprf();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SizedBox(
-        height: height,
-        width: width,
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [

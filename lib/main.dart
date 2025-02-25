@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firestoreproject2/Screens/Login_Screen.dart';
-import 'package:firestoreproject2/Screens/google_map.dart';
 import 'package:firestoreproject2/Splash.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_place_picker/resources/get_from_server.dart';
 import 'package:get/get.dart';
 
 void main() async {

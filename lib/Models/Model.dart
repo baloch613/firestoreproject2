@@ -47,7 +47,8 @@ class Chatbox {
 
   String toJson() => json.encode(toMap());
 
-  factory Chatbox.fromJson(String source) => Chatbox.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory Chatbox.fromJson(String source) =>
+      Chatbox.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -57,19 +58,15 @@ class Chatbox {
   @override
   bool operator ==(covariant Chatbox other) {
     if (identical(this, other)) return true;
-  
-    return 
-      other.name == name &&
-      other.email == email &&
-      other.password == password &&
-      other.userid == userid;
+
+    return other.name == name &&
+        other.email == email &&
+        other.password == password &&
+        other.userid == userid;
   }
 
   @override
   int get hashCode {
-    return name.hashCode ^
-      email.hashCode ^
-      password.hashCode ^
-      userid.hashCode;
+    return name.hashCode ^ email.hashCode ^ password.hashCode ^ userid.hashCode;
   }
 }

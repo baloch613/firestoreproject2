@@ -3,19 +3,22 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:firestoreproject2/Models/staticdata.dart';
+import 'package:firestoreproject2/Screens/audio_controller.dart';
+import 'package:firestoreproject2/Screens/google_map.dart';
+import 'package:firestoreproject2/Screens/pdf.dart';
+import 'package:firestoreproject2/video.dart';
+// import 'package:flutter_application_1/screens/audioController.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firestoreproject2/Models/staticdata.dart';
-import 'package:firestoreproject2/Screens/audio_controller.dart';
-import 'package:firestoreproject2/Screens/map_container.dart';
-import 'package:firestoreproject2/Screens/pdf.dart';
-import 'package:firestoreproject2/video.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+
+import 'dart:convert';
 
 class ChatScreen extends StatefulWidget {
   final String? username;
@@ -33,6 +36,7 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController msgController = TextEditingController();
   bool isMessageEmpty = true;
 
+  // AudioController audioController = Get.put(AudioController());
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   bool isRecording = false;
@@ -71,13 +75,16 @@ class _ChatScreenState extends State<ChatScreen> {
   void bottomSheet() {
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
       context: context,
       builder: (BuildContext context) {
-        return SizedBox(
-          height: height * 0.15,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+        return Container(
+          height: height * 0.25,
+          padding: const EdgeInsets.all(20),
+          child: GridView.count(
+            crossAxisCount: 4,
+            mainAxisSpacing: 10,
             children: [
               // Document
               _buildGridItem(
@@ -404,18 +411,18 @@ class _ChatScreenState extends State<ChatScreen> {
                               builder: (obj) {
                                 return CircleAvatar(
                                   radius: 27,
-                                  backgroundColor: Colors.green,
+                                  backgroundColor: Colors.black,
                                   child: Center(
                                     child: obj.isRecording
                                         ? Icon(
                                             Icons.record_voice_over,
                                             color: Colors.white,
-                                            size: isRecording ? 50 : 30,
+                                            size: obj.isRecording ? 50 : 30,
                                           )
                                         : Icon(
                                             Icons.mic,
                                             color: Colors.white,
-                                            size: isRecording ? 50 : 30,
+                                            size: obj.isRecording ? 50 : 30,
                                           ),
                                   ),
                                 );
@@ -589,7 +596,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                           height: height * 0.2,
                                           width: width * 0.85,
                                           padding: EdgeInsets.all(5),
-                                        
                                           child: Center(
                                             child: Column(
                                               children: [
@@ -599,7 +605,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15),
-                                                    
                                                     image: DecorationImage(
                                                       image: NetworkImage(
                                                         'https://maps.googleapis.com/maps/api/staticmap?'
@@ -612,7 +617,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                                   ],
+                                              ],
                                             ),
                                           ),
                                         ),
