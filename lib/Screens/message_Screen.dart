@@ -17,15 +17,21 @@ class _MessageScreenState extends State<MessageScreen> {
 
   getAllUsers() async {
     allUsers.clear();
+    // if (StaticData.model == null || StaticData.model!.userid == null) {
+    //   print("Error: StaticData.model is NULL");
+    //   return;
+    // }
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("users")
         .where("userid", isNotEqualTo: StaticData.model!.userid)
         .get();
     for (var user in snapshot.docs) {
       Chatbox model = Chatbox.fromMap(user.data() as Map<String, dynamic>);
-      setState(() {
-        allUsers.add(model);
-      });
+      if (mounted) {
+        setState(() {
+          allUsers.add(model);
+        });
+      }
     }
   }
 

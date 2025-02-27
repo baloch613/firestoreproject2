@@ -5,7 +5,6 @@ import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/Screens/audio_controller.dart';
-import 'package:firestoreproject2/Screens/google_map.dart';
 import 'package:firestoreproject2/Screens/pdf.dart';
 import 'package:firestoreproject2/video.dart';
 // import 'package:flutter_application_1/screens/audioController.dart';

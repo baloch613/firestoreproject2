@@ -20,7 +20,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var height, width;
   bool isPasswordVisible = false;
 
   late TextEditingController namecontroller;
@@ -34,13 +33,13 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("users")
-        .where("name", isEqualTo: namecontroller.text)
-        // .where("email", isEqualTo: emailController.text)
+        // .where("name", isEqualTo: namecontroller.text)
+        .where("email", isEqualTo: emailController.text)
         .where("password", isEqualTo: passwordController.text)
         .get();
 
     if (snapshot.docs.isEmpty) {
-      namecontroller.clear();
+      emailController.clear();
       passwordController.clear();
 
       // ignore: use_build_context_synchronously
@@ -52,20 +51,28 @@ class _LoginScreenState extends State<LoginScreen> {
           Chatbox.fromMap(snapshot.docs[0].data() as Map<String, dynamic>);
 
       StaticData.model = model;
+
+      if (model.userid != null) {
+        StaticData.loginId = model.userid!;
+        saveDataShrdPrf(model.userid!); // Only save if it's not null
+      } else {
+        debugPrint("Error: User ID is null");
+      }
+
       // ignore: use_build_context_synchronously
       Get.off(() => const HomeScreen(), transition: Transition.rightToLeft);
 
       passwordController.clear();
 
       // ignore: use_build_context_synchronously
-      showMySnackbar(context, "Succefully logged in ${namecontroller.text}!");
-      namecontroller.clear();
+      showMySnackbar(context, "Succefully logged in ${emailController.text}!");
+      emailController.clear();
     }
   }
 
   @override
   void initState() {
-    namecontroller = TextEditingController(text: "mukhtiar");
+    emailController = TextEditingController(text: "mukhtiar@gmail.com");
     passwordController = TextEditingController(text: "112233");
     super.initState();
   }
@@ -73,14 +80,14 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void dispose() {
     passwordController.dispose();
-    namecontroller.dispose();
+    emailController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    height = MediaQuery.of(context).size.height;
-    width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -201,11 +208,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: [
                           MyTextfield(
                             // lableText: "Your Name",
-                            hinttext: "Name",
-                            controller: namecontroller,
+                            hinttext: "Email",
+                            controller: emailController,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
-                                return "Please Enter Your Name";
+                                return "Please Enter Your Email";
                               }
                               return null;
                             },
@@ -272,8 +279,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  // Future<void> saveDataTOSF(String id) async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   await prefs.setString('userid', id);
-  // }
+  saveDataShrdPrf(String id) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    await preferences.setString("userId", id);
+  }
 }
