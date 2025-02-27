@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:firestoreproject2/GooglePages/google_map.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/Screens/audio_controller.dart';
 import 'package:firestoreproject2/Screens/pdf.dart';
@@ -14,6 +15,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -131,11 +133,14 @@ class _ChatScreenState extends State<ChatScreen> {
                 label: 'Location',
                 color: Colors.green,
                 onTap: () async {
-                  Navigator.pop(context);
+                  // Open MapScreen for location selection
                   final result = await Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MapScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => const MapScreen(isViewer: false),
+                    ),
                   );
+                  Get.back();
 
                   if (result != null) {
                     final locationData = {
@@ -576,16 +581,17 @@ class _ChatScreenState extends State<ChatScreen> {
                                 : map['type'] == "location"
                                     ? GestureDetector(
                                         onTap: () {
+                                          // Open MapScreen for viewing location
                                           final locationData =
                                               json.decode(map['message']);
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) => MapScreen(
-                                                latitude:
-                                                    locationData['latitude'],
-                                                longitude:
-                                                    locationData['longitude'],
+                                                initialLocation: LatLng(
+                                                  locationData['latitude'],
+                                                  locationData['longitude'],
+                                                ),
                                                 isViewer: true,
                                               ),
                                             ),

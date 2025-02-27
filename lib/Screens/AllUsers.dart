@@ -114,13 +114,13 @@ class _AllUserScreenState extends State<AllUserScreen> {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.wifi_calling_outlined),
-                                SizedBox(
+                                const Icon(Icons.wifi_calling_outlined),
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 InkWell(
                                     onTap: () async {
-                                      Uuid uid = Uuid();
+                                      Uuid uid = const Uuid();
                                       String reqId = uid.v4();
 
                                       ReqModel model = ReqModel(
@@ -136,7 +136,8 @@ class _AllUserScreenState extends State<AllUserScreen> {
                                           .doc(reqId)
                                           .set(model.toMap());
                                     },
-                                    child: Icon(Icons.person_add_outlined))
+                                    child:
+                                        const Icon(Icons.person_add_outlined))
                               ],
                             ),
                           ),

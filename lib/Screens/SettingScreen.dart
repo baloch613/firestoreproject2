@@ -33,9 +33,7 @@ class _SettingScreenState extends State<SettingScreen> {
               children: [
                 InkWell(
                   onTap: () {
-                    // pageController.animateToPage(0,
-                    //     duration: const Duration(microseconds: 100),
-                    //     curve: Curves.easeInOut);
+                    
                   },
                   child: const Icon(
                     Icons.arrow_back,
