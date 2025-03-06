@@ -8,8 +8,6 @@ import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/Screens/audio_controller.dart';
 import 'package:firestoreproject2/Screens/pdf.dart';
 import 'package:firestoreproject2/video.dart';
-// import 'package:flutter_application_1/screens/audioController.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';

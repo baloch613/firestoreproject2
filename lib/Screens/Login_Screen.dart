@@ -39,8 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
         .get();
 
     if (snapshot.docs.isEmpty) {
-      emailController.clear();
-      passwordController.clear();
+      // emailController.clear();
+      // passwordController.clear();
 
       // ignore: use_build_context_synchronously
       showMySnackbar(context, "Name or password is incorrect!");

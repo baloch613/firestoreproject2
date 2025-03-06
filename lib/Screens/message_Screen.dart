@@ -17,10 +17,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   getAllUsers() async {
     allUsers.clear();
-    // if (StaticData.model == null || StaticData.model!.userid == null) {
-    //   print("Error: StaticData.model is NULL");
-    //   return;
-    // }
+    
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("users")
         .where("userid", isNotEqualTo: StaticData.model!.userid)
