@@ -17,8 +17,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+        scrollBehavior: NoOverGlow(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
-        home: const LoginScreen());
+        home: const SplashScreen());
+  }
+}
+
+class NoOverGlow extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+      BuildContext context, Widget child, AxisDirection axisDirection) {
+    return StretchingOverscrollIndicator(
+      axisDirection: axisDirection,
+      child: child,
+    );
   }
 }

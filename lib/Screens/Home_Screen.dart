@@ -22,22 +22,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double height = MediaQuery.of(context).size.height;
-    final double width = MediaQuery.of(context).size.width;
     return SafeArea(
       child: Scaffold(
-        body: SizedBox(
-          height: height,
-          width: width,
-          child: PageView(
-            controller: pageController,
-            onPageChanged: (value) {
-              setState(() {
-                _index = value;
-              });
-            },
-            children: const[MessageScreen(), AllUserScreen(), SettingScreen()],
-          ),
+        body: PageView(
+          controller: pageController,
+          onPageChanged: (value) {
+            setState(() {
+              _index = value;
+            });
+          },
+          children: const [MessageScreen(), AllUserScreen(), SettingScreen()],
         ),
         bottomNavigationBar: BottomNavigationBar(
             currentIndex: _index,

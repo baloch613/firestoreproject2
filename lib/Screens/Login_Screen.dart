@@ -33,14 +33,11 @@ class _LoginScreenState extends State<LoginScreen> {
     }
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("users")
-        // .where("name", isEqualTo: namecontroller.text)
         .where("email", isEqualTo: emailController.text)
         .where("password", isEqualTo: passwordController.text)
         .get();
 
     if (snapshot.docs.isEmpty) {
-      // emailController.clear();
-      // passwordController.clear();
 
       // ignore: use_build_context_synchronously
       showMySnackbar(context, "Name or password is incorrect!");

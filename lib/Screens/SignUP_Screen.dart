@@ -56,9 +56,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // ignore: use_build_context_synchronously
     showMySnackbar(context, "Account Created Successfully");
 
-    Future.delayed(const Duration(seconds: 2), () {
       Get.off(() => const LoginScreen());
-    });
   }
 
   @override

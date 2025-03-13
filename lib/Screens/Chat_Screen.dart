@@ -1,23 +1,22 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:firestoreproject2/GooglePages/google_map.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firestoreproject2/GooglePages/map_screen.dart';
 import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/Screens/audio_controller.dart';
 import 'package:firestoreproject2/Screens/pdf.dart';
 import 'package:firestoreproject2/video.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-
-import 'dart:convert';
 
 class ChatScreen extends StatefulWidget {
   final String? username;
@@ -38,9 +37,7 @@ class _ChatScreenState extends State<ChatScreen> {
   // AudioController audioController = Get.put(AudioController());
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-  bool isRecording = false;
-  bool isPlaying = false;
-  int currentPlayingIndex = -1;
+
 
   String getFormattedTime(Timestamp? timestamp) {
     if (timestamp == null) {
@@ -342,33 +339,32 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
               ),
               Expanded(
-                  child: SizedBox(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection("chatRoom")
-                      .doc(widget.chatroomId)
-                      .collection("chats")
-                      .orderBy("time", descending: false)
-                      .snapshots(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<QuerySnapshot> snapshot) {
-                    if (snapshot.data != null) {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          Map<String, dynamic> map = snapshot.data!.docs[index]
-                              .data() as Map<String, dynamic>;
-                          return onSendmessage(
-                              MediaQuery.of(context).size, map, index);
-                        },
-                      );
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  },
-                ),
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("chatRoom")
+                    .doc(widget.chatroomId)
+                    .collection("chats")
+                    .orderBy("time", descending: false)
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                 
+                  if (snapshot.data != null) {
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        Map<String, dynamic> map = snapshot.data!.docs[index]
+                            .data() as Map<String, dynamic>;
+                        return onSendmessage(
+                            MediaQuery.of(context).size, map, index);
+                      },
+                    );
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                },
               )),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

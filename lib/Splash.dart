@@ -14,12 +14,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   getdataFromShrdprf() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance();
     final String? fetchdata = prefs.getString("userId");
+    print(fetchdata);
     if (fetchdata == null) {
-
       Future.delayed(const Duration(seconds: 3), () {
         Navigator.pushReplacement(
           context,
