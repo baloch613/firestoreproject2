@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firestoreproject2/Screens/Home_Screen.dart';
 import 'package:firestoreproject2/Models/Model.dart';
+import 'package:firestoreproject2/Models/staticdata.dart';
+import 'package:firestoreproject2/Screens/Home_Screen.dart';
 import 'package:firestoreproject2/Screens/SignUP_Screen.dart';
 import 'package:firestoreproject2/components/clickbutton.dart';
-import 'package:firestoreproject2/Models/staticdata.dart';
 import 'package:firestoreproject2/components/my_textfield.dart';
 import 'package:firestoreproject2/components/snackbar.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController passwordController;
 
   final _formKey = GlobalKey<FormState>();
+ 
   Future<void> userLogin() async {
     if (!_formKey.currentState!.validate()) {
       return;
@@ -66,6 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
       emailController.clear();
     }
   }
+
 
   @override
   void initState() {

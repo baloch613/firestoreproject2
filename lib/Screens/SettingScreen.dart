@@ -32,9 +32,7 @@ class _SettingScreenState extends State<SettingScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 InkWell(
-                  onTap: () {
-                    
-                  },
+                  onTap: () {},
                   child: const Icon(
                     Icons.arrow_back,
                     color: Colors.white,
@@ -90,7 +88,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                       ),
                       title: Text(
-                        StaticData.model!.name!,
+                        StaticData.model?.name??"mazari",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: const Text(

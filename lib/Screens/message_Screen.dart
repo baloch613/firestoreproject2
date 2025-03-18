@@ -17,18 +17,16 @@ class _MessageScreenState extends State<MessageScreen> {
 
   getAllUsers() async {
     allUsers.clear();
-    
+
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("users")
-        .where("userid", isNotEqualTo: StaticData.model!.userid)
+        .where("userid", isNotEqualTo: StaticData.loginId)
         .get();
     for (var user in snapshot.docs) {
       Chatbox model = Chatbox.fromMap(user.data() as Map<String, dynamic>);
-      if (mounted) {
-        setState(() {
-          allUsers.add(model);
-        });
-      }
+      setState(() {
+        allUsers.add(model);
+      });
     }
   }
 
@@ -152,8 +150,8 @@ class _MessageScreenState extends State<MessageScreen> {
                 decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20))),
+                        topLeft: Radius.circular(30),
+                        topRight: Radius.circular(30))),
                 child: Column(
                   children: [
                     SizedBox(
@@ -167,44 +165,44 @@ class _MessageScreenState extends State<MessageScreen> {
                           borderRadius: BorderRadius.circular(100)),
                     ),
                     Expanded(
-                      child: SizedBox(
-                        height: height,
-                        width: width,
-                        child: ListView.builder(
-                          itemCount: allUsers.length,
-                          itemBuilder: (context, index) {
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  String chatId = chatRoomId(
-                                      StaticData.model!.userid!,
-                                      allUsers[index].userid!);
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ChatScreen(
-                                          username: allUsers[index].name!,
-                                          chatroomId: chatId,
-                                        ),
-                                      ));
-                                },
-                                child: ListTile(
-                                  leading: const CircleAvatar(
-                                    backgroundImage:
-                                        AssetImage("images/mazari.jpg"),
+                      child: allUsers.isEmpty
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : ListView.builder(
+                              itemCount: allUsers.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
                                   ),
-                                  title: Text(allUsers[index].name!),
-                                  subtitle: Text(allUsers[index].email!),
-                                  trailing: Text("${index + 1}"),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
+                                  child: InkWell(
+                                    onTap: () {
+                                      String chatId = chatRoomId(
+                                          StaticData.model!.userid!,
+                                          allUsers[index].userid!);
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ChatScreen(
+                                              username: allUsers[index].name!,
+                                              chatroomId: chatId,
+                                            ),
+                                          ));
+                                    },
+                                    child: ListTile(
+                                      leading: const CircleAvatar(
+                                        backgroundImage:
+                                            AssetImage("images/mazari.jpg"),
+                                      ),
+                                      title: Text(allUsers[index].name!),
+                                      subtitle: Text(allUsers[index].email!),
+                                      trailing: Text("${index + 1}"),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                     ),
                   ],
                 ),

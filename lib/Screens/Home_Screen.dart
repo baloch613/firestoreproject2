@@ -52,9 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   label: "AllUsers"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.settings),
-                  label: "Settings",
-                  backgroundColor: Colors.white)
+                icon: Icon(Icons.settings),
+                label: "Settings",
+              )
             ]),
       ),
     );

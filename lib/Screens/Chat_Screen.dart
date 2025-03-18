@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -37,8 +38,6 @@ class _ChatScreenState extends State<ChatScreen> {
   // AudioController audioController = Get.put(AudioController());
   final AudioPlayer _audioPlayer = AudioPlayer();
 
-
-
   String getFormattedTime(Timestamp? timestamp) {
     if (timestamp == null) {
       return "";
@@ -47,7 +46,7 @@ class _ChatScreenState extends State<ChatScreen> {
     return DateFormat('h:mm a').format(dateTime);
   }
 
-  String durationText = "00:00";
+  // String durationText = "00:00";
   @override
   void initState() {
     super.initState();
@@ -132,7 +131,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const MapScreen(isViewer: false),
+                      builder: (context) => const MapScreen(),
                     ),
                   );
                   Get.back();
@@ -348,7 +347,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
-                 
                   if (snapshot.data != null) {
                     return ListView.builder(
                       itemCount: snapshot.data!.docs.length,
@@ -498,7 +496,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: (obj.isRecordPlaying &&
                                                 obj.currentId == index)
                                             ? Icon(
-                                                Icons.cancel,
+                                                Icons.pause,
                                                 color: isSender
                                                     ? Colors.white
                                                     : Colors.red,
@@ -515,7 +513,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                           width: width * 0.3,
                                           child: Padding(
                                             padding: const EdgeInsets.symmetric(
-                                                horizontal: 0),
+                                                horizontal: 10),
                                             child: LinearProgressIndicator(
                                               key: ValueKey(map['sendBy']),
                                               minHeight: 5,
@@ -594,7 +592,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                         child: Container(
                                           height: height * 0.2,
                                           width: width * 0.85,
-                                          padding: EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(5),
                                           child: Center(
                                             child: Column(
                                               children: [

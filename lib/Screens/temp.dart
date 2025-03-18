@@ -38,11 +38,13 @@ class _TempScreenState extends State<TempScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("all friends"),
+        title: const Text("all friends"),
       ),
       body: Column(
         children: [
-          Container(height: 300,width: 400,
+          SizedBox(
+            height: 300,
+            width: 400,
             child: ListView.builder(
               itemCount: allfriendz.length,
               itemBuilder: (context, index) {

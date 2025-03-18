@@ -19,7 +19,7 @@ class _AllUserScreenState extends State<AllUserScreen> {
     allUsers.clear();
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("users")
-        .where("userid", isNotEqualTo: StaticData.model!.userid)
+        .where("userid", isNotEqualTo: StaticData.loginId)
         .get();
     for (var user in snapshot.docs) {
       Chatbox model = Chatbox.fromMap(user.data() as Map<String, dynamic>);
@@ -88,62 +88,71 @@ class _AllUserScreenState extends State<AllUserScreen> {
                     ),
                   ),
                   Expanded(
-                    child: ListView.builder(
-                      itemCount: allUsers.length,
-                      itemBuilder: (context, index) {
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          color: Colors.white,
-                          child: ListTile(
-                            leading: const CircleAvatar(
-                              backgroundImage: AssetImage("images/mazari.jpg"),
-                            ),
-                            title: Text(allUsers[index].name!),
-                            subtitle: Row(
-                              children: const [
-                                Icon(
-                                  Icons.phone_callback,
-                                  size: 17,
-                                  color: Colors.green,
+                    child: allUsers.isEmpty
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : ListView.builder(
+                            itemCount: allUsers.length,
+                            itemBuilder: (context, index) {
+                              return Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
                                 ),
-                                Text("  Today,09:30 AM"),
-                              ],
-                            ),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                const Icon(Icons.wifi_calling_outlined),
-                                const SizedBox(
-                                  width: 10,
+                                color: Colors.white,
+                                child: ListTile(
+                                  leading: const CircleAvatar(
+                                    backgroundImage:
+                                        AssetImage("images/mazari.jpg"),
+                                  ),
+                                  title: Text(allUsers[index].name!),
+                                  subtitle: Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.phone_callback,
+                                        size: 17,
+                                        color: Colors.green,
+                                      ),
+                                      Text("  Today,09:30 AM"),
+                                    ],
+                                  ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      const Icon(Icons.wifi_calling_outlined),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
+                                      InkWell(
+                                          onTap: () async {
+                                            Uuid uid = const Uuid();
+                                            String reqId = uid.v4();
+
+                                            ReqModel model = ReqModel(
+                                                reciverId:
+                                                    allUsers[index].userid,
+                                                reciverName:
+                                                    allUsers[index].name,
+                                                requestId: reqId,
+                                                senderId:
+                                                    StaticData.model!.userid,
+                                                senderName:
+                                                    StaticData.model!.name,
+                                                status: 'pending');
+
+                                            await FirebaseFirestore.instance
+                                                .collection('requests')
+                                                .doc(reqId)
+                                                .set(model.toMap());
+                                          },
+                                          child: const Icon(
+                                              Icons.person_add_outlined))
+                                    ],
+                                  ),
                                 ),
-                                InkWell(
-                                    onTap: () async {
-                                      Uuid uid = const Uuid();
-                                      String reqId = uid.v4();
-
-                                      ReqModel model = ReqModel(
-                                          reciverId: allUsers[index].userid,
-                                          reciverName: allUsers[index].name,
-                                          requestId: reqId,
-                                          senderId: StaticData.model!.userid,
-                                          senderName: StaticData.model!.name,
-                                          status: 'pending');
-
-                                      await FirebaseFirestore.instance
-                                          .collection('requests')
-                                          .doc(reqId)
-                                          .set(model.toMap());
-                                    },
-                                    child:
-                                        const Icon(Icons.person_add_outlined))
-                              ],
-                            ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
                   ),
                 ],
               ),

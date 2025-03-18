@@ -169,7 +169,7 @@ class _ProfileState extends State<Profile> {
         backgroundColor: Colors.pink,
         body: Column(
           children: [
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             InkWell(

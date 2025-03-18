@@ -147,7 +147,7 @@ class MyAudioController extends GetxController {
   }
 
   String getRemainingTime() {
-    return "${remainingDuration}s";
+    return "$remainingDuration s";
   }
 
   void onPressedPlayButton(int id, String content) async {

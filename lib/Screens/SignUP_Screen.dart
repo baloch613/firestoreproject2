@@ -1,7 +1,8 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firestoreproject2/Screens/Login_Screen.dart';
 import 'package:firestoreproject2/Models/Model.dart';
+import 'package:firestoreproject2/Screens/Login_Screen.dart';
+import 'package:firestoreproject2/Screens/auth_services.dart';
 import 'package:firestoreproject2/components/clickbutton.dart';
 import 'package:firestoreproject2/components/my_textfield.dart';
 import 'package:firestoreproject2/components/snackbar.dart';
@@ -28,6 +29,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("users")
         .where("email", isEqualTo: emailController.text)
@@ -37,6 +39,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       showMySnackbar(context, "This email is already registered");
       return;
     }
+    AuthServices().registration(
+        email: emailController.text, password: passwordController.text);
     var uid = const Uuid();
     String userId = uid.v4();
 
@@ -56,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // ignore: use_build_context_synchronously
     showMySnackbar(context, "Account Created Successfully");
 
-      Get.off(() => const LoginScreen());
+    Get.off(() => const LoginScreen());
   }
 
   @override
