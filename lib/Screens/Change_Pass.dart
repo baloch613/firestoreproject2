@@ -96,7 +96,7 @@ class _ChangePassScreenState extends State<ChangePassScreen> {
                         fontSize: 17),
                   ),
                   SizedBox(height: height * 0.05),
-                  MyTextfield(
+                  MyTextfield( 
                     controller: oldPasswordController,
                     lableText: "Current Password",
                     isPassword: true,

@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         scrollBehavior: NoOverGlow(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(visualDensity: VisualDensity.adaptivePlatformDensity),
-        home: const SplashScreen());
+        home: const SplashScreen ());
   }
 }
 

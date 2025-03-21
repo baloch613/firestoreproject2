@@ -5,6 +5,7 @@ import 'package:firestoreproject2/Screens/profile.dart';
 import 'package:firestoreproject2/components/snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingScreen extends StatefulWidget {
   const SettingScreen({super.key});
@@ -88,7 +89,7 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                       ),
                       title: Text(
-                        StaticData.model?.name??"mazari",
+                        StaticData.model?.name ?? "mazari",
                         style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
                       subtitle: const Text(
@@ -260,8 +261,11 @@ class _SettingScreenState extends State<SettingScreen> {
                         ),
                         InkWell(
                           onTap: () async {
+                            SharedPreferences pref =
+                                await SharedPreferences.getInstance();
                             await FirebaseAuth.instance.signOut();
 
+                            await pref.clear();
                             // ignore: use_build_context_synchronously
                             showMySnackbar(context, "Logout successful");
 

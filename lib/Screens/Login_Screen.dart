@@ -27,11 +27,12 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController passwordController;
 
   final _formKey = GlobalKey<FormState>();
- 
+
   Future<void> userLogin() async {
     if (!_formKey.currentState!.validate()) {
       return;
     }
+
     QuerySnapshot snapshot = await FirebaseFirestore.instance
         .collection("users")
         .where("email", isEqualTo: emailController.text)
@@ -39,7 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
         .get();
 
     if (snapshot.docs.isEmpty) {
-
       // ignore: use_build_context_synchronously
       showMySnackbar(context, "Name or password is incorrect!");
 
@@ -50,24 +50,23 @@ class _LoginScreenState extends State<LoginScreen> {
 
       StaticData.model = model;
 
-      if (model.userid != null) {
-        StaticData.loginId = model.userid!;
-        saveDataShrdPrf(model.userid!); // Only save if it's not null
-      } else {
-        debugPrint("Error: User ID is null");
-      }
+        if (model.userid != null) {
+          StaticData.loginId = model.userid!;
+          saveDataShrdPrf(model.userid!); // Only save if it's not null
+        } else {
+          debugPrint("Error: User ID is null");
+        }
 
-      // ignore: use_build_context_synchronously
-      Get.off(() => const HomeScreen(), transition: Transition.rightToLeft);
+        // ignore: use_build_context_synchronously
+        Get.off(() => const HomeScreen(), transition: Transition.rightToLeft);
 
-      passwordController.clear();
+        // ignore: use_build_context_synchronously
+        showMySnackbar(context, "Succefully logged in ${emailController.text}!");
+        emailController.clear();
+        passwordController.clear();
 
-      // ignore: use_build_context_synchronously
-      showMySnackbar(context, "Succefully logged in ${emailController.text}!");
-      emailController.clear();
     }
   }
-
 
   @override
   void initState() {
@@ -277,6 +276,8 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
+ 
 
   saveDataShrdPrf(String id) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

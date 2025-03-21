@@ -24,9 +24,11 @@ class _MessageScreenState extends State<MessageScreen> {
         .get();
     for (var user in snapshot.docs) {
       Chatbox model = Chatbox.fromMap(user.data() as Map<String, dynamic>);
-      setState(() {
-        allUsers.add(model);
-      });
+      if (mounted) {
+        setState(() {
+          allUsers.add(model);
+        });
+      }
     }
   }
 
@@ -174,7 +176,7 @@ class _MessageScreenState extends State<MessageScreen> {
                               itemBuilder: (context, index) {
                                 return Card(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15),
+                                    borderRadius: BorderRadius.circular(20),
                                   ),
                                   child: InkWell(
                                     onTap: () {

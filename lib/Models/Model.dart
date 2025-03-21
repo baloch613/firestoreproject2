@@ -7,7 +7,7 @@ class Chatbox {
   String? password;
   String? userid;
   Chatbox({
-    this.name,
+     this.name,
     this.email,
     this.password,
     this.userid,

@@ -1,13 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
+final auth = FirebaseAuth.instance;
+
 class AuthServices {
   //user sigUp with email....
-   Future<String?> registration({
+  Future<String?> registration({
     required String email,
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -26,12 +28,12 @@ class AuthServices {
   }
 
   //user signIn with email...
-    Future<String?> login({
+  Future<String?> login({
     required String email,
     required String password,
   }) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );

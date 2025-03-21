@@ -19,31 +19,31 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
   var height, width;
   String oldName = "";
 
-  TextEditingController new_NameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   @override
   void initState() {
     oldName = StaticData.model!.name!;
-    new_NameController.text = oldName;
+    nameController.text = oldName;
     super.initState();
   }
 
   void updateName() async {
-    if (new_NameController.text.trim().isEmpty) {
-      new_NameController.clear();
+    if (nameController.text.trim().isEmpty) {
+      nameController.clear();
 
       showMySnackbar(context, "Name is requried!");
 
       return;
     }
 
-    if (new_NameController.text == StaticData.model!.name) {
+    if (nameController.text ==oldName ) {
       showMySnackbar(context, "You are using same Name  Pleae try new one!");
       return;
     } else {
       await FirebaseFirestore.instance
           .collection("users")
           .doc(StaticData.model!.userid)
-          .update({"name": new_NameController.text});
+          .update({"name": nameController.text});
 
       QuerySnapshot snapshot = await FirebaseFirestore.instance
           .collection("users")
@@ -57,7 +57,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
       showMySnackbar(context, "Name updated successfully!");
 
       setState(() {
-        new_NameController.clear();
+        nameController.clear();
       });
     }
   }
@@ -96,7 +96,7 @@ class _ChangeNameScreenState extends State<ChangeNameScreen> {
                 ),
                 MyTextfield(
                   lableText: "Update Your Name",
-                  controller: new_NameController,
+                  controller: nameController,
                 ),
                 SizedBox(
                   height: height * 0.02,

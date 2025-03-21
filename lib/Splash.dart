@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen> {
   getdataFromShrdprf() async {
     final prefs = await SharedPreferences.getInstance();
     final String? fetchdata = prefs.getString("userId");
-    print(fetchdata);
+    // print(fetchdata);
     if (fetchdata == null) {
       Future.delayed(const Duration(seconds: 3), () {
         Navigator.pushReplacement(
