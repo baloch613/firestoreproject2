@@ -462,7 +462,7 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
         child: IntrinsicWidth(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Column(
               children: [
                 map['type'] == "pdf"
